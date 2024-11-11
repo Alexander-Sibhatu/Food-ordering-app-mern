@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "react-query";
+import { GetTokenSilentlyOptions } from "@auth0/auth0-react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -13,7 +14,9 @@ export const useCreateMyUser = () =>    {
     const { getAccessTokenSilently } = useAuth0();
 
     const createMyUserRequest = async (user: CreateUserRequest) => {
-        const accessToken = await getAccessTokenSilently();
+        const accessToken = await getAccessTokenSilently({
+             audience: import.meta.env.VITE_AUTH0_AUDIENCE
+        } as unknown as GetTokenSilentlyOptions);
         const response = await fetch(`${API_BASE_URL}/api/my/user`, {
             method: 'POST',
             headers: {
